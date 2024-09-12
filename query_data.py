@@ -1,5 +1,5 @@
 import argparse
-from langchain.vectorstores.chroma import Chroma
+from langchain_community.vectorstores import Chroma
 from langchain.prompts import ChatPromptTemplate
 from langchain_community.llms.ollama import Ollama
 
@@ -17,7 +17,6 @@ Answer the question based only on the following context:
 Answer the question based on the above context: {question}
 """
 
-
 def main():
     """ Main """
     # Create CLI.
@@ -32,6 +31,10 @@ def query_rag(query_text: str):
     """ query_rag """
     # Prepare the DB.
     embedding_function = get_embeddings()
+    if embedding_function is None:
+            print("Failed to initialize embeddings.")
+            return
+        
     db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
 
     # Search the DB.

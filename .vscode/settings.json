@@ -1,6 +1,9 @@
 {
     "cSpell.words": [
+        "embedds",
         "langchain",
-        "Ollama"
+        "llms",
+        "Ollama",
+        "vectorstores"
     ]
 }

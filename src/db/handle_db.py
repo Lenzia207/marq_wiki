@@ -1,7 +1,7 @@
 import os
 import shutil
 from langchain.docstore.document import Document
-from langchain.vectorstores.chroma import Chroma
+from langchain_community.vectorstores import Chroma
 from src.db.chunks import calculate_chunk_ids
 from src.embedds.get_embedds import get_embeddings
 
@@ -32,12 +32,11 @@ def add_to_chroma(chunks: list[Document]):
         print(f"👉 Adding new documents: {len(new_chunks)}")
         new_chunk_ids = [chunk.metadata["id"] for chunk in new_chunks]
         db.add_documents(new_chunks, ids=new_chunk_ids)
-        db.persist()
+        # db.persist()
     else:
         print("✅ No new documents to add")
-        
-        
 
 def clear_database():
+    """ Clear DB """
     if os.path.exists(CHROMA_PATH):
         shutil.rmtree(CHROMA_PATH)

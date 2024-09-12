@@ -1,9 +1,11 @@
-from langchain.embeddings import BedrockEmbeddings
+from langchain_community.embeddings import OllamaEmbeddings
 
 def get_embeddings():
     """Get embeddings for chunks."""
-    embedding = BedrockEmbeddings(
-        credentials_profile_name="default", region_name="eu-west-1"
-        
-    )
-    return embedding
+    try:
+        # Initialize OllamaEmbeddings
+        embedding = OllamaEmbeddings(model="llama3.1:8b")
+        return embedding
+    except Exception as e:
+        print(f"Error initializing OllamaEmbeddings: {e}")
+        return None
