@@ -2,7 +2,6 @@ import argparse
 from src.documents.handle_documents import split_documents, load_documents
 from src.db.handle_db import add_to_chroma, clear_database
 
-
 CHROMA_PATH = "chroma"
 
 def main():
