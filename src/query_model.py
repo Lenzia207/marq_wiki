@@ -20,7 +20,6 @@ class QueryModel(BaseModel):
     is_complete: bool = False
 
     @classmethod
-
     def put_item(self):
         item = self.as_ddb_item()
         try:

@@ -6,7 +6,6 @@ import os
 src_path = os.path.join(os.path.dirname(__file__), '..', '..')
 sys.path.append(src_path)
 from src.query_data import query_rag, QueryResponse
-from src.query_model import QueryModel
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -24,6 +23,7 @@ class SubmitQueryRequest(BaseModel):
 
 @app.get("/")
 def index():
+    """Return a welcome message."""
     return {"Hello": "World"}
 
 @app.get("/get_input")
@@ -31,11 +31,12 @@ def index():
 
 @app.post("/submit_input")
 def submit_input_endpoint(request: SubmitQueryRequest) -> QueryResponse:
+    """Submit a query to the RAG model."""
     response = query_rag(request.query_text)
     return response
 
 if __name__ == "__main__":
     # Run this as a server directly.
-    port = 8000
-    print(f"Running the FastAPI server on port {port}.")
-    uvicorn.run("api_handler:app", host="127.0.0.1", port=port)
+    PORT = 8000
+    print(f"Running the FastAPI server on port {PORT}.")
+    uvicorn.run("api_handler:app", host="127.0.0.1", port=PORT)
