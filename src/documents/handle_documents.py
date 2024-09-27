@@ -1,14 +1,9 @@
+import os
+import glob
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.docstore.document import Document
 from langchain_community.document_loaders import PyPDFDirectoryLoader
-import os
 from src.config.config import Config
-
-# # Get the directory of the current script
-# current_dir = os.path.dirname(os.path.abspath(__file__))
-
-# # Construct the path to the data folder
-# DATA_PATH = os.path.join(current_dir, '..', 'data')
 
 def split_documents(documents: list[Document]):
     """Split documents into chunks."""
@@ -28,5 +23,3 @@ def load_documents():
     pages =  loader.load_and_split()
     print(f"Loaded {len(pages)} pages from documents.")
     return pages
-
-documents = load_documents()

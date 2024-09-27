@@ -22,7 +22,7 @@ def main():
     print(f"Loaded {len(documents)} documents.")
     chunks = split_documents(documents)
     print(f"Split documents into {len(chunks)} chunks.")
-    add_to_chroma(chunks)   
+    add_to_chroma(chunks)
 
 
 if __name__ == "__main__":

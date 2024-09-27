@@ -1,17 +1,21 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from pydantic import BaseModel
 import uvicorn
 import sys
 import os
+import shutil
 src_path = os.path.join(os.path.dirname(__file__), '..', '..')
 sys.path.append(src_path)
 from src.query_data import query_rag, QueryResponse
 from fastapi.middleware.cors import CORSMiddleware
+from src.config.config import Config
+from src.documents.handle_documents import split_documents, load_documents
+from src.db.handle_db import add_to_chroma
 
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Or specify your Flutter web app's URL
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -26,7 +30,20 @@ def index():
     """Return a welcome message."""
     return {"Hello": "World"}
 
-@app.get("/get_input")
+@app.post("/upload-document")
+async def upload_document(file: UploadFile = File(...)):
+    """Upload a document to the data folder."""
+    data_folder = os.path.join(src_path, Config.DATA_PATH)
+    file_path = os.path.join(data_folder, file.filename)
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    # Update the database
+    documents = load_documents()
+    chunks = split_documents(documents)
+    add_to_chroma(chunks)
+    
+    return {"filename": file.filename,"message": "File uploaded and database update started"}
 
 
 @app.post("/submit_input")

@@ -9,7 +9,7 @@ from langchain.prompts import ChatPromptTemplate
 from langchain_community.llms.ollama import Ollama
 
 from src.embedds.get_embedds import get_embeddings
-from src.constants.prompt_template import PROMPT_TEMPLATE_ADVANCED
+from src.constants.prompt_template import PROMPT_TEMPLATE
 from src.config.config import Config
 
 
@@ -30,14 +30,13 @@ def query_rag(query_text: str) -> QueryResponse:
         return
     else:
         print("Embedding model initialized successfully.")
-        
     db = Chroma(persist_directory=Config.CHROMA_PATH, embedding_function=embedding_function)
 
     # Search the DB.
     results = db.similarity_search_with_score(query_text, k=3)
 
     context_text = "\n\n---\n\n".join([doc.page_content for doc, _score in results])
-    prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE_ADVANCED)
+    prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
     prompt = prompt_template.format(context=context_text, question=query_text)
 
     model = Ollama(model="llama3.1:8b")
@@ -48,3 +47,4 @@ def query_rag(query_text: str) -> QueryResponse:
     return QueryResponse(
     query_text=query_text, response_text=response_text, sources=sources
     )
+    
